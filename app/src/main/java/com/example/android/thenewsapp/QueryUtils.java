@@ -1,11 +1,17 @@
 package com.example.android.thenewsapp;
 
+import android.text.TextUtils;
 import android.util.Log;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.lang.reflect.Array;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -59,6 +65,7 @@ public class QueryUtils {
             urlConnection.setRequestMethod("GET");
             urlConnection.setReadTimeout(10000 /* milliseconds */);
             urlConnection.setConnectTimeout(15000 /* milliseconds */);
+            urlConnection.connect();
 
             // If the request was successful (response code 200),
             // then read the input stream and parse the response
@@ -107,7 +114,39 @@ public class QueryUtils {
     }
 
     public static List<NewsItem> extractNewsItemFeatures(String jsonStringResponse) {
-        // TODO: get the needed values for the view and return the list
-        return new ArrayList<NewsItem>();
+        // If the JSON string is empty or null, then return early
+        if(TextUtils.isEmpty(jsonStringResponse)) {
+            return null;
+        }
+
+        // Create an empty List that we can start adding newsItems to it
+        List<NewsItem> newsItemList = new ArrayList<NewsItem>();
+
+        // Try to parse the SAMPLE_JSON_RESPONSE. If there's a problem with the way the JSON
+        // is formatted, a JSONException exception object will be thrown.
+        // Catch the exception so the app doesn't crash, and print the error message to the logs.
+        try{
+            // Convert SAMPLE_JSON_RESPONSE String into a JSONObject
+            JSONObject rootObject = new JSONObject(jsonStringResponse);
+
+            JSONArray resultsArray = rootObject.getJSONObject("response").getJSONArray("results");
+
+            for(int i = 0; i < resultsArray.length(); i++) {
+                JSONObject currentNewsItem = resultsArray.getJSONObject(i);
+                String type = currentNewsItem.getString("type");
+                String sectionName = currentNewsItem.getString("sectionName");
+                String publicationDate = currentNewsItem.getString("webPublicationDate");
+                String webTitle = currentNewsItem.getString("webTitle");
+                String webURL = currentNewsItem.getString("webUrl");
+
+                newsItemList.add(new NewsItem(type, sectionName, publicationDate, webTitle, webURL));
+            }
+        } catch (JSONException exception) {
+            // If an error is thrown when executing any of the above statements in the "try" block,
+            // catch the exception here, so the app doesn't crash. Print a log message
+            // with the message from the exception.
+            Log.e("QueryUtils", "Problem parsing the newsItems JSON results", exception);
+        }
+        return newsItemList;
     }
 }
