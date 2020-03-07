@@ -5,26 +5,34 @@
     android:id="@+id/newsItem"
     android:layout_width="match_parent"
     android:layout_height="100dp"
-    android:orientation="vertical">
-
-    <TextView
-        android:id="@+id/newsItemDate"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toTopOf="@id/newsItemTitle"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:text="@string/placeholder" />
+    android:orientation="vertical"
+    android:padding="@dimen/standard_padding">
 
     <TextView
         android:id="@+id/newsItemTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:fontFamily="sans-serif-medium"
+        android:maxLines="1"
+        android:textColor="@android:color/black"
+        android:textSize="@dimen/title_font_size"
+        app:layout_constraintBottom_toTopOf="@id/newsItemDate"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.047"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="@string/placeholder" />
+
+    <TextView
+        android:id="@+id/newsItemDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.047"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/newsItemDate"
+        app:layout_constraintTop_toBottomOf="@id/newsItemTitle"
         tools:text="@string/placeholder" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

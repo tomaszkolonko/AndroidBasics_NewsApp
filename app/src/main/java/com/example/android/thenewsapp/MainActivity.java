@@ -1,12 +1,10 @@
 package com.example.android.thenewsapp;
 
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.ListView;
-
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -23,9 +21,8 @@ public class MainActivity extends AppCompatActivity {
     /** LOG_TAG */
     private static final String LOG_TAG = "MainActivity";
 
+    /** NewsItemAdapter */
     private NewsItemAdapter mAdapter;
-
-    // TODO add adapter
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

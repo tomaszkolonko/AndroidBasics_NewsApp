@@ -3,21 +3,16 @@ package com.example.android.thenewsapp;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
-import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-
 import java.util.ArrayList;
 
 public class NewsItemAdapter extends ArrayAdapter<NewsItem> {
-
-    // TODO add some variables that you later will insert into the views
 
     public NewsItemAdapter(Context context, ArrayList<NewsItem> newsItems) {
         super(context, 0, newsItems);
@@ -35,28 +30,31 @@ public class NewsItemAdapter extends ArrayAdapter<NewsItem> {
                     parent, false);
         }
 
-        setOnclickListenerOnView(convertView);
+        setOnclickListenerOnView(convertView, currentNewsItem);
 
-        // TODO look up all views and populate them
-
-        TextView newsItemDate = (TextView) convertView.findViewById(R.id.newsItemDate);
-        newsItemDate.setText(currentNewsItem.getWebPubDate());
-
-        TextView newsItemTitle = (TextView) convertView.findViewById(R.id.newsItemTitle);
+        TextView newsItemTitle = convertView.findViewById(R.id.newsItemTitle);
         newsItemTitle.setText(currentNewsItem.getWebTitle());
 
-
+        TextView newsItemDate = convertView.findViewById(R.id.newsItemDate);
+        String dateAndTimeString = createDateAndTimeString(currentNewsItem.getWebPubDate());
+        newsItemDate.setText(dateAndTimeString);
 
         return convertView;
     }
 
-    private void setOnclickListenerOnView(View convertView) {
+    private String createDateAndTimeString(String dateString) {
+        String[] dateParts = dateString.split("T");
+        String dateAndTimeString = "Published on " + dateParts[0] + " at "
+                + dateParts[1].substring(0, dateParts[1].length()-1);
+        return dateAndTimeString;
+    }
+
+    private void setOnclickListenerOnView(View convertView, final NewsItem currentNewsItem) {
         convertView.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
-                // TODO: add correct url
-                Uri webpage = Uri.parse("www.google.ch");
+                Uri webpage = Uri.parse(currentNewsItem.getWebUrl());
                 Intent intent = new Intent(Intent.ACTION_VIEW, webpage);
                 if(intent.resolveActivity(getContext().getPackageManager()) != null) {
                     getContext().startActivity(intent);
