@@ -47,6 +47,14 @@ public class QueryUtils {
         return url;
     }
 
+    /**
+     * This method makes the HTTP request and checks for the responsecode
+     * and other possible problems and handles them gracefully
+     *
+     * @param url
+     * @return
+     * @throws IOException
+     */
     public static String makeHttpRequest(URL url) throws IOException {
         String jsonStringResponse = "";
 
@@ -110,6 +118,13 @@ public class QueryUtils {
         return builder.toString();
     }
 
+    /**
+     * This method parses and extracts all the needed features from the json String
+     * retrieved from the Guardian API and returns a list of NewsItem objects.
+     *
+     * @param jsonStringResponse
+     * @return
+     */
     public static List<NewsItem> extractNewsItemFeatures(String jsonStringResponse) {
         // If the JSON string is empty or null, then return early
         if(TextUtils.isEmpty(jsonStringResponse)) {
