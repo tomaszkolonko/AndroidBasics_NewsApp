@@ -9,9 +9,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.widget.ListView;
 import android.widget.TextView;
-
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,6 +29,12 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
      */
     private static final int NEWSITEM_LOADER_ID = 1;
 
+    /**
+     * Global variable to have a reference to the emtpy TextView which is displayed
+     * when no data is retrieved successfully from the server.
+     */
+    private TextView mEmptyStateTextView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,6 +47,9 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         mAdapter = new NewsItemAdapter(this, new ArrayList<NewsItem>());
 
         newsItemListView.setAdapter(mAdapter);
+
+        mEmptyStateTextView = (TextView) findViewById(R.id.empty_view);
+        newsItemListView.setEmptyView(mEmptyStateTextView);
 
         ConnectivityManager cm = (ConnectivityManager) getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
         if(cm.getActiveNetworkInfo() != null) {
@@ -91,8 +97,8 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         if (newsItems != null && !newsItems.isEmpty()) {
             mAdapter.addAll(newsItems);
         } else {
-            // If there is no data from server show it somehow to the user
-            setContentView(R.layout.empty_view);
+            // Set empty state text to display "No newsItems found."
+            mEmptyStateTextView.setText(R.string.no_stories_found);
         }
     }
 
