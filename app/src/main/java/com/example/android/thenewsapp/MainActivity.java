@@ -3,6 +3,7 @@ package com.example.android.thenewsapp;
 import androidx.appcompat.app.AppCompatActivity;
 import android.app.LoaderManager;
 import android.content.Loader;
+import android.net.Uri;
 import android.os.Bundle;
 import android.widget.ListView;
 import java.util.ArrayList;
@@ -12,9 +13,6 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
     /** developer API_KEY issued to the user */
     private static final String API_KEY = "54100795-f441-4267-910b-139d4496d78d";
-
-    /** Guardian query base */
-    private static final String GENERAL_QUERY = "https://content.guardianapis.com/search?q=coronavirus";
 
     /** LOG_TAG */
     private static final String LOG_TAG = "MainActivity";
@@ -27,28 +25,6 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
      * This really only comes into play if you're using multiple loaders.
      */
     private static final int NEWSITEM_LOADER_ID = 1;
-
-    @Override
-    public Loader<List<NewsItem>> onCreateLoader(int i, Bundle bundle) {
-        // Create a new loader for the given URL
-        return new NewsItemLoader(this, (GENERAL_QUERY + "&api-key=" + API_KEY));
-    }
-    @Override
-    public void onLoadFinished(Loader<List<NewsItem>> loader, List<NewsItem> newsItems) {
-        // Clear the adapter of previous newsItem data
-        mAdapter.clear();
-
-        // If there is a valid list of newsItems, then add them to the adapter's
-        // data set. This will trigger the ListView to update.
-        if (newsItems != null && !newsItems.isEmpty()) {
-            mAdapter.addAll(newsItems);
-        }
-    }
-    @Override
-    public void onLoaderReset(Loader<List<NewsItem>> loader) {
-        // Loader reset, so we can clear out our existing data.
-        mAdapter.clear();
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,5 +46,57 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         // the bundle. Pass in this activity for the LoaderCallbacks parameter (which is valid
         // because this activity implements the LoaderCallbacks interface).
         loaderManager.initLoader(NEWSITEM_LOADER_ID, null, this);
+    }
+
+    /**
+     * Creates a new NewsItemLoader
+     *
+     * @param i
+     * @param bundle
+     * @return
+     */
+    @Override
+    public Loader<List<NewsItem>> onCreateLoader(int i, Bundle bundle) {
+        // Create a new loader for the given URL
+        return new NewsItemLoader(this, createUriFromBuilder());
+    }
+
+    /**
+     * This method is called after the background task has finished loading the data.
+     *
+     * @param loader
+     * @param newsItems
+     */
+    @Override
+    public void onLoadFinished(Loader<List<NewsItem>> loader, List<NewsItem> newsItems) {
+        // Clear the adapter of previous newsItem data
+        mAdapter.clear();
+
+        // If there is a valid list of newsItems, then add them to the adapter's
+        // data set. This will trigger the ListView to update.
+        if (newsItems != null && !newsItems.isEmpty()) {
+            mAdapter.addAll(newsItems);
+        }
+    }
+
+    /**
+     *
+     * @param loader
+     */
+    @Override
+    public void onLoaderReset(Loader<List<NewsItem>> loader) {
+        // Loader reset, so we can clear out our existing data.
+        mAdapter.clear();
+    }
+
+    private String createUriFromBuilder() {
+        Uri.Builder builder = new Uri.Builder();
+        builder.scheme("https")
+                .authority("content.guardianapis.com")
+                .appendPath("search")
+                .appendQueryParameter("q", "coronavirus")
+                .appendQueryParameter("show-tags", "contributor")
+                .appendQueryParameter("api-key", API_KEY);
+        return builder.build().toString();
     }
 }

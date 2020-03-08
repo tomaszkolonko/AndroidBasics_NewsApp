@@ -17,14 +17,19 @@ public class NewsItem {
     /** web url of the full newsItem */
     private String mWebUrl;
 
+    /** First and last name of the author of this NewsItem */
+    private String mAuthor;
+
     public NewsItem() {}
 
-    public NewsItem(String type, String sectionName, String pubDate, String webTitle, String webUrl) {
+    public NewsItem(String type, String sectionName, String pubDate, String webTitle,
+                    String webUrl, String author) {
         this.mType = type;
         this.mSectionName = sectionName;
         this.mWebPubDate = pubDate;
         this.mWebTitle = webTitle;
         this.mWebUrl = webUrl;
+        this.mAuthor = author;
     }
 
     public String getType() { return mType; }
@@ -37,4 +42,5 @@ public class NewsItem {
 
     public String getWebUrl() { return mWebUrl; }
 
+    public String getAuthor() { return mAuthor; }
 }

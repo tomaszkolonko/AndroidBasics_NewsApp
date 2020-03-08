@@ -147,11 +147,15 @@ public class QueryUtils {
                 JSONObject currentNewsItem = resultsArray.getJSONObject(i);
                 String type = currentNewsItem.getString("type");
                 String sectionName = currentNewsItem.getString("sectionName");
+                String authorFirstName = currentNewsItem.getJSONArray("tags")
+                        .getJSONObject(0).getString("firstName");
+                String authorLastName = currentNewsItem.getJSONArray("tags")
+                        .getJSONObject(0).getString("lastName");
+                String author = authorFirstName + authorLastName;
                 String publicationDate = currentNewsItem.getString("webPublicationDate");
                 String webTitle = currentNewsItem.getString("webTitle");
                 String webURL = currentNewsItem.getString("webUrl");
-
-                newsItemList.add(new NewsItem(type, sectionName, publicationDate, webTitle, webURL));
+                newsItemList.add(new NewsItem(type, sectionName, publicationDate, webTitle, webURL, author));
             }
         } catch (JSONException exception) {
             // If an error is thrown when executing any of the above statements in the "try" block,

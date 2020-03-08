@@ -39,13 +39,24 @@ public class NewsItemAdapter extends ArrayAdapter<NewsItem> {
         String dateAndTimeString = createDateAndTimeString(currentNewsItem.getWebPubDate());
         newsItemDate.setText(dateAndTimeString);
 
+        TextView newsItemDetails = convertView.findViewById(R.id.newsItemDetails);
+        String detailsString = "Written by: " + currentNewsItem.getAuthor() + " in "
+                + currentNewsItem.getSectionName();
+        newsItemDetails.setText(detailsString);
+
         return convertView;
     }
 
+    /**
+     * Formats the retrieved time in a human readable format.
+     *
+     * @param dateString
+     * @return
+     */
     private String createDateAndTimeString(String dateString) {
         String[] dateParts = dateString.split("T");
         String dateAndTimeString = "Published on " + dateParts[0] + " at "
-                + dateParts[1].substring(0, dateParts[1].length()-1);
+                + dateParts[1].substring(0, dateParts[1].length()-4);
         return dateAndTimeString;
     }
 
