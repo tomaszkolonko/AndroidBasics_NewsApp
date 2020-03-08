@@ -2,10 +2,16 @@ package com.example.android.thenewsapp;
 
 import androidx.appcompat.app.AppCompatActivity;
 import android.app.LoaderManager;
+import android.content.Context;
 import android.content.Loader;
+import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.widget.ListView;
+import android.widget.TextView;
+
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,13 +45,21 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
         newsItemListView.setAdapter(mAdapter);
 
-        // Get a reference to the LoaderManager, in order to interact with loaders.
-        LoaderManager loaderManager = getLoaderManager();
+        ConnectivityManager cm = (ConnectivityManager) getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+        if(cm.getActiveNetworkInfo() != null) {
 
-        // Initialize the loader. Pass in the int ID constant defined above and pass in null for
-        // the bundle. Pass in this activity for the LoaderCallbacks parameter (which is valid
-        // because this activity implements the LoaderCallbacks interface).
-        loaderManager.initLoader(NEWSITEM_LOADER_ID, null, this);
+            // Get a reference to the LoaderManager, in order to interact with loaders.
+            LoaderManager loaderManager = getLoaderManager();
+
+            // Initialize the loader. Pass in the int ID constant defined above and pass in null for
+            // the bundle. Pass in this activity for the LoaderCallbacks parameter (which is valid
+            // because this activity implements the LoaderCallbacks interface).
+            loaderManager.initLoader(NEWSITEM_LOADER_ID, null, this);
+        } else {
+            setContentView(R.layout.empty_view);
+            TextView textView = findViewById(R.id.emptyView);
+            textView.setText(R.string.no_internet_found);
+        }
     }
 
     /**

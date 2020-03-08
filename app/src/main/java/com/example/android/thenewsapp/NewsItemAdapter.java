@@ -2,6 +2,7 @@ package com.example.android.thenewsapp;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,8 +15,12 @@ import java.util.ArrayList;
 
 public class NewsItemAdapter extends ArrayAdapter<NewsItem> {
 
+    /** Is this correct ?? */
+    private static Resources mRes;
+
     public NewsItemAdapter(Context context, ArrayList<NewsItem> newsItems) {
         super(context, 0, newsItems);
+        this.mRes = context.getResources();
     }
 
     @NonNull
@@ -40,7 +45,9 @@ public class NewsItemAdapter extends ArrayAdapter<NewsItem> {
         newsItemDate.setText(dateAndTimeString);
 
         TextView newsItemDetails = convertView.findViewById(R.id.newsItemDetails);
-        String detailsString = "Written by: " + currentNewsItem.getAuthor() + " in "
+        String detailsString = mRes.getString(R.string.written_by)
+                + currentNewsItem.getAuthor()
+                + mRes.getString(R.string.in)
                 + currentNewsItem.getSectionName();
         newsItemDetails.setText(detailsString);
 
@@ -55,7 +62,9 @@ public class NewsItemAdapter extends ArrayAdapter<NewsItem> {
      */
     private String createDateAndTimeString(String dateString) {
         String[] dateParts = dateString.split("T");
-        String dateAndTimeString = "Published on " + dateParts[0] + " at "
+        String dateAndTimeString = mRes.getString(R.string.published_on)
+                + dateParts[0]
+                + mRes.getString(R.string.at)
                 + dateParts[1].substring(0, dateParts[1].length()-4);
         return dateAndTimeString;
     }

@@ -1,4 +1,11 @@
 <resources>
     <string name="app_name">TheNewsApp</string>
     <string name="placeholder">Placeholder</string>
+
+    <string name="written_by">"Written by: "</string>
+    <string name="in">" in "</string>
+    <string name="published_on">"Published on "</string>
+    <string name="at">" at "</string>
+    <string name="no_internet_found">No Network Connection</string>
+    <string name="no_stories_found">No News Found</string>
 </resources>
